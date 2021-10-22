@@ -13,12 +13,12 @@ using Newtonsoft.Json;
 
 namespace DWR_Tracker
 {
-  public partial class MainForm : Form, IMemoryReadListener
+  public partial class MainForm : Form, IMemoryReadListener, IConnectionStatusListener
   {
     private DWConfiguration Config = DWGlobals.DWConfiguration;
     private DWHero Hero = DWGlobals.Hero;
     private DWOverworldMap Overworld = new DWOverworldMap();
-    private AutotrackerConnection autoTracker = new AutotrackerConnection();
+    private AutotrackerConnection autoTracker;
 
     private bool inBattle = false;
     private int currentMapindex = 0;
@@ -32,6 +32,7 @@ namespace DWR_Tracker
     public MainForm()
     {
       InitializeComponent();
+      autoTracker = new AutotrackerConnection(this);
 
       // try to find a suitable emulator automatically
       if (!EmulatorConnectionWorker.IsBusy)
@@ -232,6 +233,12 @@ namespace DWR_Tracker
     public void HandleMemoryRead(MemoryBlock memData)
     {
       UpdateGameState(memData);
+    }
+
+    public void ConnectionStatusChanged(bool connected)
+    {
+      // update emulator connection status in the status bar
+      EmulatorStatusLabel.Text = connected ? "Connection established" : "Connection lost";
     }
 
     private void Stat_ValueChanged(object sender, EventArgs e)

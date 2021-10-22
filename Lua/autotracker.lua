@@ -7,13 +7,74 @@
 --
 -- This script is based on the QUsb2Snes luabridge.lua script.
 --
-local socket = require("socket.core")
 
+--
+-- Enum of the supported emulators.
+--
+Emulators = {
+  BIZHAWK = 1,
+  FCEUX = 2,
+  MESEN = 3,
+  UNKNOWN = 4,
+}
+
+-- Script variables
+local socket = require("socket.core")
 local socketConnection
 local connected = false
 local disconnectRequested = false
-local address = '127.0.0.1'
+local emuAddress = '127.0.0.1'
 local port = 4242
+local emulator = Emulators.UNKNOWN
+
+
+--
+-- Try to determine which emulator this script is running in.
+--
+function determineEmulator()
+  -- Bizhawk has the event library.
+  -- FCEUX has the FCEU library.
+  -- Mesen seems to put all functionality in the emu package, so
+  -- use that as the default for now. 
+  -- Need to find a better way to detect Mesen.
+  if event then
+    return Emulators.BIZHAWK
+  elseif FCEU then
+    return Emulators.FCEUX
+  else
+    return Emulators.MESEN
+  end
+  
+end
+
+--
+-- Handle memory reads on FCEUX and Bizhawk.
+--
+function readFceux(address, length)
+  byteRange = memory.readbyterange(address, length)
+  return {string.byte(byteRange, 1, #byteRange)}
+end
+
+--
+-- Handle memory reads on Bizhawk
+--
+function readBizhawk(address, length)
+  return memory.readbyterange(address-1, length+1)
+end
+
+--
+-- Handle memory reads on Mesen.
+-- Mesen does not have a bulk read function, so 
+-- build up the table byte by byte.
+--
+function readMesen(address, length)
+  byteRange = {}
+  for i = 0, length-1 do
+    table.insert(byteRange, emu.read(address + i, emu.memType.cpuDebug))
+  end
+  --return {string.byte(byteRange, 1, #byteRange)}
+  return byteRange
+end
 
 -- Handle incoming commands from the socket
 local function onMessage(message)
@@ -30,10 +91,16 @@ local function onMessage(message)
   end
 
   if parts[1] == "Read" then
-    local adr = tonumber(parts[2])
+    local address = tonumber(parts[2])
     local length = tonumber(parts[3])
-    byteRange = memory.readbyterange(adr, length)
-    dataTable = {string.byte(byteRange, 1, #byteRange)}
+    local dataTable
+    if emulator == Emulators.MESEN then
+      dataTable = readMesen(address, length)
+    elseif emulator == Emulators.FCEUX then
+      dataTable = readFceux(address, length)
+    elseif emulator == Emulators.BIZHAWK then
+      dataTable = readBizhawk(address, length)
+    end
     -- Send back a json formatted message with the requested memory data
     socketConnection:send("{\"data\": [" .. table.concat(dataTable, ",") .. "]}\n")
   elseif parts[1] == "Exit" then
@@ -53,7 +120,7 @@ handleSocket = function()
       return
     end
     
-    local returnCode, errorMessage = socketConnection:connect(address, port)
+    local returnCode, errorMessage = socketConnection:connect(emuAddress, port)
     if (returnCode == nil) then
       print("Error while connecting: " .. errorMessage)
       connected = false
@@ -82,9 +149,13 @@ handleSocket = function()
   end
 end
 
-
+emulator = determineEmulator()
 -- Main loop
-while true do
-  handleSocket()
-  emu.frameadvance();
-end -- End main loop
+if emulator == Emulators.MESEN then
+  emu.addEventCallback(handleSocket, emu.eventType.endFrame)
+else
+  while true do
+    handleSocket()
+    emu.frameadvance();
+  end
+end

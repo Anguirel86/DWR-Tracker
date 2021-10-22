@@ -50,7 +50,8 @@ namespace DWR_Tracker.Classes
     {
       if (data.Length != length)
       {
-        throw new IndexOutOfRangeException("Invalid data size for this memory block.");
+        throw new IndexOutOfRangeException(
+          String.Format("Invalid data size for this memory block.  Expected {0} but got {1}", length, data.Length));
       }
 
       this.memData = data;
@@ -86,6 +87,14 @@ namespace DWR_Tracker.Classes
     public void HandleMemoryRead(MemoryBlock memData);
   }
 
+  /// <summary>
+  /// Clients can realize this interface and register with the autotracker for
+  /// notification when emulators connect or disconnect from the autotracker.
+  /// </summary>
+  public interface IConnectionStatusListener
+  {
+    public void ConnectionStatusChanged(bool connected);
+  }
 
   /// <summary>
   /// This class represents a command to be sent to the emulator.
@@ -115,6 +124,13 @@ namespace DWR_Tracker.Classes
     private readonly ManualResetEvent messageProcessing = new ManualResetEvent(false);
     private readonly ManualResetEvent SendLoopEvent = new ManualResetEvent(false);
     private Thread sendThread = null, recThread = null;
+    private IConnectionStatusListener connectionListener;
+
+
+    public AutotrackerConnection(IConnectionStatusListener listener)
+    {
+      this.connectionListener = listener;
+    }
 
     /// <summary>
     /// Add a command to the send queue.
@@ -196,19 +212,19 @@ namespace DWR_Tracker.Classes
     {
       while (true)
       {
-        if (emulatorClient != null && emulatorClient.Connected)
+        if (IsConnected())
         {
           messageProcessing.Reset();
           currentCommand = commandQueue.Take();
           emulatorClient.Send(Encoding.ASCII.GetBytes(currentCommand.command));
-         
+
           messageProcessing.WaitOne();
-        } else
+        }
+        else
         {
           // We're waiting on a connection.
-          Console.WriteLine("Send loop waiting");
+          SendLoopEvent.Reset();
           SendLoopEvent.WaitOne();
-          Console.WriteLine("Send loop sending");
         }
       }
     }
@@ -249,8 +265,8 @@ namespace DWR_Tracker.Classes
         while (true)
         {
           emulatorClient = listener.Accept();
-          Console.WriteLine("Emulator connected");
           SendLoopEvent.Set();
+          connectionListener.ConnectionStatusChanged(true);
 
           try
           {
@@ -285,14 +301,18 @@ namespace DWR_Tracker.Classes
             // unexpectedly closes while we are waiting for a response.
 
             // Close the connection, clean up, and wait for a new connection.
+            emulatorClient.Shutdown(SocketShutdown.Both);
             emulatorClient.Close();
-            SendLoopEvent.Reset();
+            emulatorClient = null;
+            SendLoopEvent.Set();
             messageBuffer.Clear();
+            messageProcessing.Set();
             while (commandQueue.Count > 0)
             {
               commandQueue.Take();
             }
           }
+          connectionListener.ConnectionStatusChanged(false);
         }
 
       } catch (Exception e)
