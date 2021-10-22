@@ -8,7 +8,7 @@
         {
         }
 
-        protected override int ReadValue()
+        protected override int ReadValue(MemoryBlock memData)
         {
             // At the end of the game your level gets set to 255
             if (LevelStat.Value == 255) { return -1; }

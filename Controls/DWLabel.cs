@@ -21,7 +21,7 @@ namespace DWR_Tracker.Controls
 
         public void FitText(string text, bool fitToParent = false, FontStyle style = FontStyle.Regular, float minRatio = 1f)
         {
-            if (text.Length == 0) { return; }
+            if (text == null || text.Length == 0) { return; }
             if (fitToParent)
             {
                 this.Height = this.Parent.Size.Height;

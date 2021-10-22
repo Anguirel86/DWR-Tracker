@@ -20,10 +20,10 @@ namespace DWR_Tracker.Classes
 
         public event EventHandler ValueChanged;
 
-        public abstract int ReadValue();
+        public abstract int ReadValue(MemoryBlock memData);
 
-        public void Update(bool force = false) {
-            Update(ReadValue(), 1, force);
+        public void Update(MemoryBlock memData, bool force = false) {
+            Update(ReadValue(memData), 1, force);
         }
 
         public virtual void Update(int value, bool force = false)

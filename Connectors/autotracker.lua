@@ -17,7 +17,6 @@ local port = 4242
 
 -- Handle incoming commands from the socket
 local function onMessage(message)
-  print(message)
   -- Break the command string up into component parts.
   -- Parts are separated by pipe characters '|'
   --

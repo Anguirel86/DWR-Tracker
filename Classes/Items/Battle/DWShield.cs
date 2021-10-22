@@ -26,9 +26,9 @@ namespace DWR_Tracker.Classes.Items
             }.Select(s => (basePath + s.ImagePath, s.Name, s.ExtraValue)).ToArray();
         }
 
-        public override int ReadValue()
+        public override int ReadValue(MemoryBlock memData)
         {
-            return DWGlobals.ProcessReader.ReadByte(0xBE) & 0x3;
+            return memData.ReadU8(0xBE) & 0x3;
         }
         public override void Update(int value, bool force = false)
         {
