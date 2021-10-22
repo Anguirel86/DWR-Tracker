@@ -2,35 +2,35 @@
 
 Auto tracker for the [Dragon Warrior Randomizer](https://github.com/mcgrew/dwrandomizer)
 
-![DWR Tracker screenshot](https://github.com/tonylukasavage/DWR-Tracker/raw/master/dwr-tracker.PNG)
+![DWR Tracker screenshot](https://github.com/anguirel86/DWR-Tracker/raw/master/dwr-tracker.PNG)
 
 ## Requirements
 
 * Windows
-* [fceux 2.2.3](http://sourceforge.net/projects/fceultra/files/Binaries/2.2.3/fceux-2.2.3-win32.zip/download)
-	* You **MUST** use the win32 binary download, other versions will not connect to the tracker
+* Lua enabled emulator
+  * Bizhawk
+  * FCEUX
+  * Mesen
 
 ## Usage
 
 This project is in an **alpha** state. You need to use the tracker via the following steps.
 
-1. Open you emulator 
-2. Launch the Dragon Warrior Randomizer seed you wish to play
-3. Double-click the "DWR Tracker.exe" file. It will auto-connect to the emulator instance that you have open.
+1. Double-click the "DWR Tracker.exe" file
+2. Open you emulator 
+3. Launch the Dragon Warrior Randomizer seed you wish to play
+4. Open a new Lua script window in the emulator 
+5. Run the autotracker.lua script packaged with the tracker
+6. The emulator and tracker will connect and "Connection established" will be displayed at the bottom of the tracker window.
 
 ## Known Issues
 
-* There's no way yet to manually connect to an emulator, which is why the emulator needs to be open with DWR already started before you can launch the tracker.
-* The map discovery will reset if you turn off the emulator and start the game again. Resets from within the emulator are fine, but actually closing the emulator will not preserve map discovery.
+* Switching ROMs without pausing the tracker lua script can break the connection and can force a restart of the tracker to resume autotracking.
+* Mesen doesn't like to reconnect after a connection is broken.
 
 ## TODO 
 
-The priority of the following work will likely be dictated by requests.
-
-* Add names to key locations on overworld map (towns and caves)
-* Add chest and search spot tracker
-* Add general notes section
-* Mesen support
-	* I started this, but I'm no Cheat Engine pointer path genius. I'll likely need a little help here for this to get completed.
+* Implement ROM reading for overworld maps and enemy abilities.
+* Implement clickable icons so the tracker can be used as a manual tracker.
 
 
