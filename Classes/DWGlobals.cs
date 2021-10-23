@@ -5,7 +5,6 @@
         public static string DWImagePath = "DWR_Tracker.Images.";
         public static DWConfiguration DWConfiguration = new DWConfiguration();
         public static DWFont DWFont = new DWFont();
-        public static DWProcessReader ProcessReader;
         public static DWHero Hero = new DWHero();
 
         // This only covers fast leveling

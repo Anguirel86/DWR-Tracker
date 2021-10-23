@@ -282,7 +282,9 @@ namespace DWR_Tracker
             EnemyPanel.Visible = false;
             CombatPanel.Title = map.Name;
             MapPanel.Visible = true;
-            MapPictureBox.Image = mapIndex == 0 ? Overworld.GetImage() : map.GetImage();
+            int x = heroMemoryBlock.ReadU8(0x3A);
+            int y = heroMemoryBlock.ReadU8(0x3B);
+            MapPictureBox.Image = mapIndex == 0 ? Overworld.GetImage(x, y) : map.GetImage();
           });
         }
       }
@@ -294,7 +296,7 @@ namespace DWR_Tracker
         int y = heroMemoryBlock.ReadU8(0x3B);
         Overworld.Discover(x, y);
         Image img = MapPictureBox.Image;
-        MapPictureBox.Image = Overworld.GetImage();
+        MapPictureBox.Image = Overworld.GetImage(x, y);
         if (img != null) { img.Dispose(); }
         GC.Collect();
         GC.WaitForPendingFinalizers();
@@ -366,6 +368,23 @@ namespace DWR_Tracker
     {
       ToolStripMenuItem mi = (ToolStripMenuItem)sender;
       Config.StreamerMode = mi.Checked = !mi.Checked;
+      MainFormLayoutUpdate();
+    }
+
+    private void readRomToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+      ToolStripMenuItem mi = (ToolStripMenuItem)sender;
+      
+      using (OpenFileDialog openFileDialog = new OpenFileDialog())
+      {
+        if (openFileDialog.ShowDialog() == DialogResult.OK)
+        {
+          String filePath = openFileDialog.FileName;
+          byte[] fileData = File.ReadAllBytes(filePath);
+          Overworld.DecodeMap(fileData);
+        }
+      }
+
       MainFormLayoutUpdate();
     }
 

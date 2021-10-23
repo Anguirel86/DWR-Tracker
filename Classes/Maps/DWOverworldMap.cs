@@ -25,8 +25,8 @@ namespace DWR_Tracker.Classes.Maps
 
   public class DWOverworldMap
   {
-    private const int tilesOffset = 0x1D5D;
-    private const int rowPointersOffset = 0x2653;
+    private const int tilesOffset = 0x1D5D; 
+    private const int rowPointersOffset = 0x2663; // Value upped by 0x10 to account for ROM header
     private const int gridSize = 120;
     private GridTile[,] grid = new GridTile[gridSize, gridSize];
     private int tileSize = 16;
@@ -44,25 +44,23 @@ namespace DWR_Tracker.Classes.Maps
       }
     }
 
-    public void DecodeMap()
+    public void DecodeMap(byte[] romData)
     {
-      DWProcessReader reader = DWGlobals.ProcessReader;
-      Func<int, int> read = offset => reader.Read(tilesOffset + offset, 1, 3)[0];
       int count, tileIndex;
 
-      // pointers to each role of tiles are after tile tile table
+      // pointers to each row of tiles are after tile tile table
       int[] rowPointers = new int[gridSize];
       for (int i = 0; i < gridSize; i++)
       {
-          byte[] bytes = reader.Read(rowPointersOffset + (i * 2), 2, 3);
-          rowPointers[i] = BitConverter.ToUInt16(bytes, 0) - 0x8000 - tilesOffset;
+          byte[] bytes = new byte[] { romData[rowPointersOffset + (i * 2)], romData[rowPointersOffset + (i * 2) + 1] };
+          rowPointers[i] = BitConverter.ToUInt16(bytes, 0) + 0x10 - 0x8000; // +0x10 is for the ROM header 
       }
 
 
       // process each tile by row
       for (int y = 0; y < gridSize; y++)
       {
-          int mapByte = read(rowPointers[y]);
+          int mapByte = romData[rowPointers[y]];
           if (mapByte == 0xFF) { break; }
           tileIndex = mapByte >> 4;
           count = mapByte & 0xF;
@@ -72,7 +70,7 @@ namespace DWR_Tracker.Classes.Maps
               grid[x, y] = new GridTile(x, y, tileIndex, false);
               if (count == 0)
               {
-                  mapByte = read(rowPointers[y] + ++byteCtr);
+                  mapByte = romData[rowPointers[y] + ++byteCtr];
                   if (mapByte == 0xFF) { break; }
                   tileIndex = mapByte >> 4;
                   count = mapByte & 0xF;
@@ -87,7 +85,7 @@ namespace DWR_Tracker.Classes.Maps
       IsDecoded = true;
     }
 
-    public Image GetImage()
+    public Image GetImage(int herox, int heroy)
     {
       if (!IsDecoded) { return null; }
 
@@ -123,10 +121,8 @@ namespace DWR_Tracker.Classes.Maps
       }
 
       // draw the hero
-      int xh = DWGlobals.ProcessReader.ReadByte(0x3A);
-      int yh = DWGlobals.ProcessReader.ReadByte(0x3B);
       g.DrawImage(DWRTiles[(int)TileName.Hero].Image,
-              new Point((xh - 1) * tileSize, (yh - 1) * tileSize));
+              new Point((herox - 1) * tileSize, (heroy - 1) * tileSize));
 
       return image;
     }

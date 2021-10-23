@@ -104,7 +104,6 @@
     <Compile Include="Classes\Items\Quest\DWHarpOrStaff.cs" />
     <Compile Include="Classes\Items\Quest\DWRainbowDrop.cs" />
     <Compile Include="Classes\Items\Quest\DWStonesOfSunlight.cs" />
-    <Compile Include="Classes\DWProcessReader.cs" />
     <Compile Include="Classes\Stats\DWStatNextLevel.cs" />
     <Compile Include="Controls\DWItemBox.cs">
       <SubType>Component</SubType>
