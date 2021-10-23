@@ -24,9 +24,9 @@ namespace DWR_Tracker.Classes
         public int RunGroup;
         public float StopspellCap;
         public string Skill1;
-        public float Skill1Chance;
+        public int Skill1Chance;
         public string Skill2;
-        public float Skill2Chance;
+        public int Skill2Chance;
 
         private float runGroupFactor;
         private const string baseImagePath = "DWR_Tracker.Images.Enemies.";
@@ -80,6 +80,22 @@ namespace DWR_Tracker.Classes
             return dst;
         }
 
+        private int getSkillChance(int chanceValue)
+        {
+            int chance = 75;
+            if (chanceValue == 0)
+            {
+                chance = 0;
+            } else if (chanceValue == 1)
+            {
+                chance = 25;
+            } else if (chanceValue == 2)
+            {
+                chance = 50;
+            }
+            return chance;
+        }
+
         public string[,] GetBattleInfo(DWHero hero)
         {
             int[] damageDealt = DamageDealtRange(hero);
@@ -103,8 +119,8 @@ namespace DWR_Tracker.Classes
 
                 // skills
                 { "SKILLS:", "" },
-                { Skill1, Math.Floor(Skill1Chance * 100).ToString() + "%" },
-                { Skill2, Math.Floor(Skill2Chance * 100).ToString() + "%" },
+                { Skill1, getSkillChance(Skill1Chance).ToString() + "%" },
+                { Skill2, getSkillChance(Skill2Chance).ToString() + "%" },
                 { "", "" },
 
                 // defense

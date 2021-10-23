@@ -329,40 +329,19 @@ namespace DWR_Tracker
       Application.Exit();
     }
 
-    /*private void EmulatorConnectionWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+    private void ReadMonsterAbilityData(byte[] romData)
     {
-      DWProcessReader reader = DWGlobals.ProcessReader;
-      if (reader != default(DWProcessReader))
+      for (int i =0; i < DWGlobals.Enemies.Length; i++)
       {
-        // update emulator name in status bar
-        EmulatorStatusLabel.Text = reader.Process.MainWindowTitle;
-
-        // execute first hero update
-        Hero.Update(true);
-
-        // update all enemy skills and attack patterns
-        int enemyOffset = 0x9E4B;
-        for (int i = 0; i < DWGlobals.Enemies.Length; i++)
-        {
-          DWEnemy enemy = DWGlobals.Enemies[i];
-
-          int pattern = reader.Read((enemyOffset + (i * 0x10)) + 3, 1, 2)[0];
-          enemy.Skill2Chance = (pattern & 0x3) / 4f;
-          enemy.Skill2 = enemy.GetSkill2((pattern >> 2) & 0x3);
-          enemy.Skill1Chance = ((pattern >> 4) & 0x3) / 4f;
-          enemy.Skill1 = enemy.GetSkill1((pattern >> 6) & 0x3);
-
-          int resist = reader.Read(enemyOffset + (i * 0x10) + 4, 1, 2)[0];
-          enemy.StopspellResist = (resist % 0xF) / 16f;
-
-          Console.WriteLine("0x{0:X}", enemyOffset + (i * 0x10) + 4);
-          Console.WriteLine(enemy.Name + ": " + Math.Floor(enemy.StopspellResist * 100));
-        }
-
-        // decode DWR map
-        Overworld.DecodeMap();
+        int pointer = 0x5e5b + (16 * i);
+        DWEnemy enemy = DWGlobals.Enemies[i];
+        // It looks like it's 4 bits per ability, Top 2 are the move id, bottom 2 are the chance
+        enemy.Skill2 = enemy.GetSkill2((romData[pointer + 3] >> 2) & 0x3);
+        enemy.Skill2Chance = (romData[pointer + 3]) & 0x3;
+        enemy.Skill1 = enemy.GetSkill1((romData[pointer + 3] >> 6) & 0x3);
+        enemy.Skill1Chance = (romData[pointer + 3] >> 4) & 0x3;
       }
-    }*/
+    }
 
     private void streamerModeToolStripMenuItem_Click(object sender, EventArgs e)
     {
@@ -382,6 +361,7 @@ namespace DWR_Tracker
           String filePath = openFileDialog.FileName;
           byte[] fileData = File.ReadAllBytes(filePath);
           Overworld.DecodeMap(fileData);
+          ReadMonsterAbilityData(fileData);
         }
       }
 
