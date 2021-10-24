@@ -172,6 +172,8 @@ namespace DWR_Tracker.Classes
       {
         recThread = new Thread(new ThreadStart(this.ReceiveLoop));
         sendThread = new Thread(new ThreadStart(this.SendLoop));
+        recThread.IsBackground = true;
+        sendThread.IsBackground = true;
         sendThread.Start();
         recThread.Start();
       }
