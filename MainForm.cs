@@ -33,15 +33,6 @@ namespace DWR_Tracker
     {
       InitializeComponent();
       autoTracker = new AutotrackerConnection(this);
-
-      // try to find a suitable emulator automatically
-      if (!EmulatorConnectionWorker.IsBusy)
-      {
-        EmulatorConnectionWorker.RunWorkerAsync();
-      }
-
-      // TODO: initialize map
-
     }
 
     private delegate void UpdateEnemyDelegate(DWEnemy enemy);
@@ -329,7 +320,11 @@ namespace DWR_Tracker
       Application.Exit();
     }
 
-    private void ReadMonsterAbilityData(byte[] romData)
+    /// <summary>
+    /// Update monster data with ROM values. 
+    /// </summary>
+    /// <param name="romData"></param>
+    private void ReadMonsterData(byte[] romData)
     {
       for (int i =0; i < DWGlobals.Enemies.Length; i++)
       {
@@ -361,7 +356,7 @@ namespace DWR_Tracker
           String filePath = openFileDialog.FileName;
           byte[] fileData = File.ReadAllBytes(filePath);
           Overworld.DecodeMap(fileData);
-          ReadMonsterAbilityData(fileData);
+          ReadMonsterData(fileData);
         }
       }
 
