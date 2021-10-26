@@ -41,7 +41,6 @@
       this.autoTrackingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
       this.DWStatusStrip = new System.Windows.Forms.StatusStrip();
       this.EmulatorStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-      this.EmulatorConnectionWorker = new System.ComponentModel.BackgroundWorker();
       this.DWContentPanel = new System.Windows.Forms.Panel();
       this.CombatPanel = new DWR_Tracker.Controls.DWPanel();
       this.CoordsPanel = new DWR_Tracker.Controls.DWPanel();
@@ -105,23 +104,26 @@
       // connectToolStripMenuItem
       // 
       this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
-      this.connectToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+      this.connectToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
       this.connectToolStripMenuItem.Text = "Connect...";
+      // 
+      // readRomToolStripMenuItem
+      // 
       this.readRomToolStripMenuItem.Name = "readRomToolStripMenuItem";
-      this.readRomToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+      this.readRomToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
       this.readRomToolStripMenuItem.Text = "Read Rom...";
       this.readRomToolStripMenuItem.Click += new System.EventHandler(this.readRomToolStripMenuItem_Click);
       // 
       // toolStripSeparator1
       // 
       this.toolStripSeparator1.Name = "toolStripSeparator1";
-      this.toolStripSeparator1.Size = new System.Drawing.Size(131, 6);
+      this.toolStripSeparator1.Size = new System.Drawing.Size(134, 6);
       // 
       // exitToolStripMenuItem
       // 
       this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
       this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-      this.exitToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+      this.exitToolStripMenuItem.Size = new System.Drawing.Size(137, 22);
       this.exitToolStripMenuItem.Text = "Exit";
       this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
       // 
@@ -176,11 +178,6 @@
       this.EmulatorStatusLabel.Size = new System.Drawing.Size(86, 17);
       this.EmulatorStatusLabel.Text = "Not connected";
       // 
-      // EmulatorConnectionWorker
-      // 
-      //this.EmulatorConnectionWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.EmulatorConnectionWorker_DoWork);
-      //this.EmulatorConnectionWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.EmulatorConnectionWorker_RunWorkerCompleted);
-      // 
       // DWContentPanel
       // 
       this.DWContentPanel.Controls.Add(this.CombatPanel);
@@ -201,7 +198,7 @@
       this.CombatPanel.Controls.Add(this.EnemyPanel);
       this.CombatPanel.Controls.Add(this.MapPanel);
       this.CombatPanel.Location = new System.Drawing.Point(3, 386);
-      this.CombatPanel.MinimumSize = new System.Drawing.Size(112, 56);
+      this.CombatPanel.MinimumSize = new System.Drawing.Size(84, 58);
       this.CombatPanel.Name = "CombatPanel";
       this.CombatPanel.Size = new System.Drawing.Size(498, 510);
       this.CombatPanel.TabIndex = 14;
@@ -215,7 +212,7 @@
       this.CoordsPanel.Controls.Add(this.CoordsEWTextBox);
       this.CoordsPanel.Controls.Add(this.CoordsNSTextBox);
       this.CoordsPanel.Location = new System.Drawing.Point(349, 434);
-      this.CoordsPanel.MinimumSize = new System.Drawing.Size(40, 56);
+      this.CoordsPanel.MinimumSize = new System.Drawing.Size(40, 58);
       this.CoordsPanel.Name = "CoordsPanel";
       this.CoordsPanel.Size = new System.Drawing.Size(149, 76);
       this.CoordsPanel.TabIndex = 4;
@@ -225,11 +222,11 @@
       // 
       this.CoordsEWCharTextBox.BackColor = System.Drawing.Color.Black;
       this.CoordsEWCharTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.CoordsEWCharTextBox.Font = new System.Drawing.Font("Dragon Warrior (NES)", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CoordsEWCharTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.CoordsEWCharTextBox.ForeColor = System.Drawing.Color.White;
       this.CoordsEWCharTextBox.Location = new System.Drawing.Point(22, 40);
       this.CoordsEWCharTextBox.Name = "CoordsEWCharTextBox";
-      this.CoordsEWCharTextBox.Size = new System.Drawing.Size(53, 19);
+      this.CoordsEWCharTextBox.Size = new System.Drawing.Size(53, 22);
       this.CoordsEWCharTextBox.TabIndex = 5;
       this.CoordsEWCharTextBox.Text = "E/W";
       // 
@@ -237,11 +234,11 @@
       // 
       this.CoordsNSCharTextBox.BackColor = System.Drawing.Color.Black;
       this.CoordsNSCharTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.CoordsNSCharTextBox.Font = new System.Drawing.Font("Dragon Warrior (NES)", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CoordsNSCharTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.CoordsNSCharTextBox.ForeColor = System.Drawing.Color.White;
       this.CoordsNSCharTextBox.Location = new System.Drawing.Point(22, 17);
       this.CoordsNSCharTextBox.Name = "CoordsNSCharTextBox";
-      this.CoordsNSCharTextBox.Size = new System.Drawing.Size(53, 19);
+      this.CoordsNSCharTextBox.Size = new System.Drawing.Size(53, 22);
       this.CoordsNSCharTextBox.TabIndex = 4;
       this.CoordsNSCharTextBox.Text = "N/S";
       // 
@@ -249,11 +246,11 @@
       // 
       this.CoordsEWTextBox.BackColor = System.Drawing.Color.Black;
       this.CoordsEWTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.CoordsEWTextBox.Font = new System.Drawing.Font("Dragon Warrior (NES)", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CoordsEWTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.CoordsEWTextBox.ForeColor = System.Drawing.Color.White;
       this.CoordsEWTextBox.Location = new System.Drawing.Point(81, 40);
       this.CoordsEWTextBox.Name = "CoordsEWTextBox";
-      this.CoordsEWTextBox.Size = new System.Drawing.Size(53, 19);
+      this.CoordsEWTextBox.Size = new System.Drawing.Size(53, 22);
       this.CoordsEWTextBox.TabIndex = 3;
       this.CoordsEWTextBox.Text = "??";
       // 
@@ -261,11 +258,11 @@
       // 
       this.CoordsNSTextBox.BackColor = System.Drawing.Color.Black;
       this.CoordsNSTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-      this.CoordsNSTextBox.Font = new System.Drawing.Font("Dragon Warrior (NES)", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+      this.CoordsNSTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
       this.CoordsNSTextBox.ForeColor = System.Drawing.Color.White;
       this.CoordsNSTextBox.Location = new System.Drawing.Point(81, 17);
       this.CoordsNSTextBox.Name = "CoordsNSTextBox";
-      this.CoordsNSTextBox.Size = new System.Drawing.Size(53, 19);
+      this.CoordsNSTextBox.Size = new System.Drawing.Size(53, 22);
       this.CoordsNSTextBox.TabIndex = 2;
       this.CoordsNSTextBox.Text = "??";
       // 
@@ -284,7 +281,7 @@
       this.EnemyInfoTable.ColumnCount = 2;
       this.EnemyInfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 30F));
       this.EnemyInfoTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 70F));
-      this.EnemyInfoTable.Location = new System.Drawing.Point(26, 227);
+      this.EnemyInfoTable.Location = new System.Drawing.Point(8, 227);
       this.EnemyInfoTable.Name = "EnemyInfoTable";
       this.EnemyInfoTable.RowCount = 9;
       this.EnemyInfoTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
@@ -302,7 +299,7 @@
       // EnemyPanelPictureBox
       // 
       this.EnemyPanelPictureBox.BackColor = System.Drawing.Color.LightSteelBlue;
-      this.EnemyPanelPictureBox.Location = new System.Drawing.Point(26, 11);
+      this.EnemyPanelPictureBox.Location = new System.Drawing.Point(8, 11);
       this.EnemyPanelPictureBox.Name = "EnemyPanelPictureBox";
       this.EnemyPanelPictureBox.Size = new System.Drawing.Size(192, 192);
       this.EnemyPanelPictureBox.TabIndex = 1;
@@ -311,9 +308,9 @@
       // EnemyStatsTable
       // 
       this.EnemyStatsTable.ColumnCount = 2;
-      this.EnemyStatsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 58.42105F));
-      this.EnemyStatsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.57895F));
-      this.EnemyStatsTable.Location = new System.Drawing.Point(236, 11);
+      this.EnemyStatsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 62.83525F));
+      this.EnemyStatsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 37.16475F));
+      this.EnemyStatsTable.Location = new System.Drawing.Point(206, 11);
       this.EnemyStatsTable.Name = "EnemyStatsTable";
       this.EnemyStatsTable.RowCount = 14;
       this.EnemyStatsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
@@ -330,7 +327,7 @@
       this.EnemyStatsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
       this.EnemyStatsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
       this.EnemyStatsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-      this.EnemyStatsTable.Size = new System.Drawing.Size(231, 384);
+      this.EnemyStatsTable.Size = new System.Drawing.Size(261, 384);
       this.EnemyStatsTable.TabIndex = 0;
       // 
       // MapPanel
@@ -356,7 +353,7 @@
       this.BattlePanel.BackColor = System.Drawing.Color.Black;
       this.BattlePanel.Controls.Add(this.BattleItemFlowPanel);
       this.BattlePanel.Location = new System.Drawing.Point(399, 3);
-      this.BattlePanel.MinimumSize = new System.Drawing.Size(40, 56);
+      this.BattlePanel.MinimumSize = new System.Drawing.Size(40, 58);
       this.BattlePanel.Name = "BattlePanel";
       this.BattlePanel.Size = new System.Drawing.Size(102, 379);
       this.BattlePanel.TabIndex = 9;
@@ -376,7 +373,7 @@
       this.OptionalItemPanel.BackColor = System.Drawing.Color.Black;
       this.OptionalItemPanel.Controls.Add(this.OptionalItemFlowPanel);
       this.OptionalItemPanel.Location = new System.Drawing.Point(203, 298);
-      this.OptionalItemPanel.MinimumSize = new System.Drawing.Size(40, 56);
+      this.OptionalItemPanel.MinimumSize = new System.Drawing.Size(40, 58);
       this.OptionalItemPanel.Name = "OptionalItemPanel";
       this.OptionalItemPanel.Size = new System.Drawing.Size(190, 85);
       this.OptionalItemPanel.TabIndex = 8;
@@ -396,7 +393,7 @@
       this.QuestPanel.BackColor = System.Drawing.Color.Black;
       this.QuestPanel.Controls.Add(this.RequiredItemFlowPanel);
       this.QuestPanel.Location = new System.Drawing.Point(3, 299);
-      this.QuestPanel.MinimumSize = new System.Drawing.Size(40, 56);
+      this.QuestPanel.MinimumSize = new System.Drawing.Size(40, 58);
       this.QuestPanel.Name = "QuestPanel";
       this.QuestPanel.Size = new System.Drawing.Size(194, 83);
       this.QuestPanel.TabIndex = 10;
@@ -416,7 +413,7 @@
       this.StatPanel.BackColor = System.Drawing.Color.Black;
       this.StatPanel.Controls.Add(this.StatTableLayout);
       this.StatPanel.Location = new System.Drawing.Point(3, 3);
-      this.StatPanel.MinimumSize = new System.Drawing.Size(128, 56);
+      this.StatPanel.MinimumSize = new System.Drawing.Size(97, 58);
       this.StatPanel.Name = "StatPanel";
       this.StatPanel.Size = new System.Drawing.Size(194, 295);
       this.StatPanel.TabIndex = 7;
@@ -445,7 +442,7 @@
       // 
       this.SpellPanel.BackColor = System.Drawing.Color.Black;
       this.SpellPanel.Location = new System.Drawing.Point(203, 3);
-      this.SpellPanel.MinimumSize = new System.Drawing.Size(144, 56);
+      this.SpellPanel.MinimumSize = new System.Drawing.Size(110, 58);
       this.SpellPanel.Name = "SpellPanel";
       this.SpellPanel.Size = new System.Drawing.Size(190, 295);
       this.SpellPanel.TabIndex = 6;
@@ -513,7 +510,6 @@
     private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem viewToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-    private System.ComponentModel.BackgroundWorker EmulatorConnectionWorker;
     private System.Windows.Forms.Panel DWContentPanel;
     private System.Windows.Forms.ToolStripMenuItem streamerModeToolStripMenuItem;
     private System.Windows.Forms.ToolStripMenuItem autoTrackingToolStripMenuItem;
