@@ -7,14 +7,6 @@
         public static DWFont DWFont = new DWFont();
         public static DWHero Hero = new DWHero();
 
-        // This only covers fast leveling
-        public static int[] LevelNexts = new int[30]
-        {
-            0, 5, 17, 35, 82, 165,337, 600, 975, 1500, 2175, 3000, 4125, 5625, 7500,
-            9750, 12000, 14250, 16500, 19500, 22500, 25500, 28500, 31500, 34500,
-            37500, 40500, 43500, 46500, 49151
-        };
-
         public static string[] InventoryItems = new string[16]
         {
             "Nothing",

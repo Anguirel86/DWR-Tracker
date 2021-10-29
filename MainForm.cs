@@ -338,6 +338,21 @@ namespace DWR_Tracker
       }
     }
 
+    /// <summary>
+    /// Read the ROM for experience values needed to level up.
+    /// </summary>
+    /// <param name="romData">byte array containing ROM data</param>
+    private void ReadExperienceData(byte[] romData)
+    {
+      int[] xpLevels = new int[30];
+      int pointer = 0xf36b;
+      for (int i = 0; i < 30; i++)
+      {
+        xpLevels[i] = BitConverter.ToUInt16(romData, pointer + i*2);
+      }
+      Hero.NextLevel.SetExpToLevelValues(xpLevels);
+    }
+
     private void streamerModeToolStripMenuItem_Click(object sender, EventArgs e)
     {
       ToolStripMenuItem mi = (ToolStripMenuItem)sender;
@@ -357,6 +372,7 @@ namespace DWR_Tracker
           byte[] fileData = File.ReadAllBytes(filePath);
           Overworld.DecodeMap(fileData);
           ReadMonsterData(fileData);
+          ReadExperienceData(fileData);
         }
       }
 
